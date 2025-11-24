@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHO KILLED BRITTO?</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts: Special Elite (Typewriter) and Cinzel (Occult) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- 16mm FILM GRAIN & AESTHETIC --- */
+        :root {
+            --gold: #c5a059;
+            --red: #8a1c1c;
+            --black: #0a0a0a;
+            --off-white: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--off-white);
+            font-family: 'Courier Prime', monospace;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* The Film Grain Overlay */
+        .film-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.15;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            animation: grain-flicker 0.2s infinite;
+        }
+
+        /* Vertical Scratches */
+        .scratches {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 51;
+            background: repeating-linear-gradient(90deg,
+                    transparent 0,
+                    transparent 40%,
+                    rgba(255, 255, 255, 0.05) 40.5%,
+                    transparent 41%);
+            animation: scratch-move 4s infinite linear;
+        }
+
+        /* Vignette */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 52;
+            background: radial-gradient(circle, transparent 50%, black 120%);
+        }
+
+        /* Subtle Projector Jitter */
+        .projector-shake {
+            animation: jitter 3s infinite;
+        }
+
+        /* Typography Styles */
+        .font-occult {
+            font-family: 'Cinzel', serif;
+        }
+
+        .font-typewriter {
+            font-family: 'Special Elite', cursive;
+        }
+
+        /* Animations */
+        @keyframes grain-flicker {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            10% {
+                transform: translate(-5%, -5%);
+            }
+
+            20% {
+                transform: translate(-10%, 5%);
+            }
+
+            30% {
+                transform: translate(5%, -10%);
+            }
+
+            40% {
+                transform: translate(-5%, 15%);
+            }
+
+            50% {
+                transform: translate(-10%, 5%);
+            }
+
+            60% {
+                transform: translate(15%, 0);
+            }
+
+            70% {
+                transform: translate(0, 10%);
+            }
+
+            80% {
+                transform: translate(-15%, 0);
+            }
+
+            90% {
+                transform: translate(10%, 5%);
+            }
+
+            100% {
+                transform: translate(5%, 0);
+            }
+        }
+
+        @keyframes scratch-move {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(100px);
+            }
+        }
+
+        @keyframes jitter {
+            0% {
+                transform: translateY(0px);
+            }
+
+            95% {
+                transform: translateY(0px);
+            }
+
+            96% {
+                transform: translateY(-2px);
+            }
+
+            97% {
+                transform: translateY(1px);
+            }
+
+            98% {
+                transform: translateY(-1px);
+            }
+
+            99% {
+                transform: translateY(2px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Redaction Effect */
+        .redacted {
+            background-color: var(--black);
+            color: var(--black);
+            border-bottom: 2px solid var(--red);
+            transition: all 0.5s ease;
+            cursor: help;
+        }
+
+        .redacted:hover {
+            color: var(--red);
+            background-color: transparent;
+        }
+
+        /* Glitch Text */
+        .glitch-text {
+            position: relative;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 var(--red);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 var(--gold);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(12px, 9999px, 5px, 0);
+            }
+
+            20% {
+                clip: rect(100px, 9999px, 80px, 0);
+            }
+
+            40% {
+                clip: rect(20px, 9999px, 140px, 0);
+            }
+
+            60% {
+                clip: rect(60px, 9999px, 10px, 0);
+            }
+
+            80% {
+                clip: rect(40px, 9999px, 120px, 0);
+            }
+
+            100% {
+                clip: rect(90px, 9999px, 30px, 0);
+            }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% {
+                clip: rect(60px, 9999px, 100px, 0);
+            }
+
+            20% {
+                clip: rect(10px, 9999px, 40px, 0);
+            }
+
+            40% {
+                clip: rect(80px, 9999px, 120px, 0);
+            }
+
+            60% {
+                clip: rect(20px, 9999px, 10px, 0);
+            }
+
+            80% {
+                clip: rect(110px, 9999px, 50px, 0);
+            }
+
+            100% {
+                clip: rect(40px, 9999px, 90px, 0);
+            }
+        }
+
+        /* Evidence Card Hover */
+        .evidence-card {
+            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: grayscale(100%) sepia(50%) contrast(1.2);
+            border: 1px solid #333;
+        }
+
+        .evidence-card:hover {
+            transform: scale(1.02) rotate(1deg);
+            filter: grayscale(0%) sepia(20%) contrast(1.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.1);
+        }
+
+        /* Input styling */
+        input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 10px rgba(138, 28, 28, 0.5);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen relative selection:bg-red-900 selection:text-white">
+
+    <!-- Overlays for 16mm Effect -->
+    <div class="film-overlay"></div>
+    <div class="scratches"></div>
+    <div class="vignette"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="projector-shake relative z-10 container mx-auto px-4 py-12 max-w-4xl flex flex-col items-center">
+
+        <!-- HEADER / HOOK -->
+        <header class="text-center mb-16 w-full border-b border-neutral-800 pb-8">
+            <h2 class="text-yellow-600/60 font-typewriter text-sm tracking-[0.5em] mb-4 uppercase">Case File: #2015-XC
+            </h2>
+            <h1 class="font-occult text-5xl md:text-7xl text-neutral-200 tracking-tighter mb-2 glitch-text"
+                data-text="WHO KILLED BRITTO?">
+                WHO KILLED BRITTO?
+            </h1>
+            <p class="font-typewriter text-red-700 mt-4 text-lg">
+                "The sun must set to rise ."
+            </p>
+        </header>
+
+        <!-- INTRO NARRATIVE -->
+        <section class="max-w-2xl text-justify mb-20 font-typewriter leading-relaxed text-neutral-400">
+            <p class="mb-6">
+                They found him by the old library, posed like some twisted art project. The administration calls it an
+                accident. <span class="text-yellow-600">They lie.</span>
+            </p>
+            <p class="mb-6">
+                Shawn knew too much. He found the patterns in the source code, the whispers in the steam tunnels. He
+                found the <span class="redacted" title="THE NINTH CIRCLE">Ninth Circle</span>. Now he's gone, and all
+                that's left are these fragments.
+            </p>
+            <p>
+                We have <span id="countdown">48:00:00</span> before they scrub the evidence. Look closely. The truth is
+                in the grain.
+            </p>
+        </section>
+
+        <!-- CLUE BOARD (Grid) -->
+        <section class="w-full mb-20">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="font-occult text-2xl text-yellow-600 border-l-4 border-red-900 pl-4">EVIDENCE LOCKER</h3>
+                <i data-lucide="archive" class="text-neutral-600"></i>
+            </div>
+
+            <!-- 
+                 TEMPLATE NOTE: 
+                 Edit the content inside 'evidence-card' divs to change clues.
+                 You can replace the icons with <img> tags if you have photos.
+            -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Clue 1 -->
+                <div class="evidence-card bg-neutral-900 p-6 relative">
+                    <div class="absolute -top-3 -right-3 text-red-800 rotate-12">
+                        <i data-lucide="pin" class="w-8 h-8 fill-current"></i>
+                    </div>
+                    <div
+                        class="h-32 flex items-center justify-center border border-dashed border-neutral-700 mb-4 bg-black">
+                        <i data-lucide="map" class="w-12 h-12 text-neutral-600"></i>
+                    </div>
+                    <h4 class="font-typewriter text-yellow-600 text-lg mb-2">The Map</h4>
+                    <p class="text-xs text-neutral-500 font-mono">Found in his dorm. X marks the Clock Tower. Why?</p>
+                </div>
+
+                <!-- Clue 2 -->
+                <div class="evidence-card bg-neutral-900 p-6 relative">
+                    <div class="absolute -top-3 -right-3 text-red-800 rotate-12">
+                        <i data-lucide="pin" class="w-8 h-8 fill-current"></i>
+                    </div>
+                    <div
+                        class="h-32 flex items-center justify-center border border-dashed border-neutral-700 mb-4 bg-black">
+                        <i data-lucide="cassette-tape" class="w-12 h-12 text-neutral-600"></i>
+                    </div>
+                    <h4 class="font-typewriter text-yellow-600 text-lg mb-2">Audio Log #4</h4>
+                    <p class="text-xs text-neutral-500 font-mono">"They wear red robes beneath the robes. I saw them."
+                    </p>
+                </div>
+
+                <!-- Clue 3 (Locked) -->
+                <div class="evidence-card bg-neutral-900 p-6 relative opacity-75">
+                    <div class="absolute -top-3 -right-3 text-red-800 rotate-12">
+                        <i data-lucide="pin" class="w-8 h-8 fill-current"></i>
+                    </div>
+                    <div
+                        class="h-32 flex items-center justify-center border border-dashed border-neutral-700 mb-4 bg-black">
+                        <i data-lucide="lock" class="w-12 h-12 text-red-900"></i>
+                    </div>
+                    <h4 class="font-typewriter text-red-900 text-lg mb-2">CLASSIFIED</h4>
+                    <p class="text-xs text-neutral-500 font-mono">Police Report. Requires Level 4 Clearance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE NINTH CIRCLE GATE (Interactive) -->
+        <section class="w-full max-w-lg border border-yellow-900/30 bg-black p-8 relative">
+            <!-- Decorative Corners -->
+            <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-yellow-600"></div>
+            <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-yellow-600"></div>
+            <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-yellow-600"></div>
+            <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-yellow-600"></div>
+
+            <div class="text-center mb-6">
+                <i data-lucide="eye" class="w-12 h-12 mx-auto text-red-900 mb-4 animate-pulse"></i>
+                <h3 class="font-occult text-2xl text-yellow-600">ENTER THE CIRCLE</h3>
+                <p class="text-xs text-neutral-600 mt-2 font-mono uppercase tracking-widest">Abandon hope, all ye who
+                    enter here</p>
+            </div>
+
+            <div class="space-y-4">
+                <div id="terminal-output" class="font-mono text-xs text-red-500 h-6 min-h-[1.5rem] text-center"></div>
+
+                <div class="flex border-b border-neutral-700 pb-2">
+                    <span class="text-yellow-600 mr-2 font-mono">></span>
+                    <input type="text" id="password-input"
+                        class="bg-transparent w-full text-neutral-300 font-mono focus:outline-none uppercase placeholder-neutral-800"
+                        placeholder="PASSPHRASE REQUIRED" autocomplete="off">
+                </div>
+                <button onclick="checkPassword()"
+                    class="w-full bg-neutral-900 hover:bg-red-900/20 text-yellow-600 font-typewriter py-2 text-sm border border-neutral-800 transition-colors">
+                    AUTHENTICATE
+                </button>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="mt-24 text-center pb-10 opacity-40">
+            <p class="font-mono text-xs text-neutral-600 tracking-[0.3em]">
+                34.0522° N, 118.2437° W
+            </p>
+            <div class="mt-4 flex justify-center gap-4">
+                <span class="text-red-900">IX</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- AUDIO ELEMENT (Hidden, user triggered) -->
+    <!-- Ideally, you add a click listener to the body to start ambient sound. 
+         For now, keeping it silent to respect browser autoplay policies. -->
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // --- COUNTDOWN LOGIC ---
+        // Sets a countdown for 48 hours from "now" roughly.
+        // You can set a specific date: new Date('2023-12-31')
+        const targetDate = new Date();
+        targetDate.setHours(targetDate.getHours() + 48);
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').innerText = "00:00:00";
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerText =
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- PASSWORD LOGIC ---
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const output = document.getElementById('terminal-output');
+            const val = input.value.trim().toUpperCase();
+
+            // TEMPLATE NOTE: Change the passwords here
+            // Logic: You can have multiple valid answers leading to different URLs or alerts
+            if (val === "DANTE" || val === "INFERNO" || val === "NINTH") {
+                output.innerText = "ACCESS GRANTED. WELCOME INITIATE.";
+                output.style.color = "#c5a059"; // Gold
+                input.disabled = true;
+
+                // Optional: Redirect after success
+                setTimeout(() => {
+                    window.location.href = "land2.html";
+                    alert("The Circle opens. (Link your next page in the JS)");
+                }, 1500);
+
+            } else if (val === "BRITTO") {
+                output.innerText = "HE IS GONE. DO NOT SPEAK HIS NAME.";
+            } else {
+                output.innerText = "ERROR: INVALID CREDENTIALS. THE EYE WATCHES.";
+                input.value = "";
+
+                // Shake effect on error
+                input.parentElement.classList.add('animate-pulse');
+                setTimeout(() => input.parentElement.classList.remove('animate-pulse'), 500);
+            }
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('password-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // --- SUBTLE FLICKER SCRIPT ---
+        // Randomly dims the body opacity slightly to simulate voltage drop
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                document.body.style.opacity = 0.8;
+                setTimeout(() => document.body.style.opacity = 1, 50);
+            }
+        }, 2000);
+
+    </script>
+</body>
+
+</html>
