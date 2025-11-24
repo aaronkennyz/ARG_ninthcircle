@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IX CIRCLE // ARCHIVE</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts: Share Tech Mono (Tech/ARG Standard), Nosifer (Horror) -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Nosifer&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent-red: #cc0000;
+            --bg-dark: #050505;
+            --text-main: #e0e0e0;
+            --border-dim: #333333;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            height: 100vh;
+            margin: 0;
+            /* Subtle tech grid background */
+            background-image:
+                linear-gradient(rgba(20, 20, 20, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(20, 20, 20, 0.8) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* --- UTILITIES --- */
+        .border-tech {
+            border: 1px solid var(--border-dim);
+            transition: border-color 0.3s ease;
+        }
+
+        .border-tech:hover {
+            border-color: var(--accent-red);
+        }
+
+        .text-accent {
+            color: var(--accent-red);
+        }
+
+        .bg-accent {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-red);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-red);
+            box-shadow: 0 0 10px rgba(200, 0, 0, 0.2);
+        }
+
+        /* --- GAME LOGIC ANIMATIONS --- */
+        .fade-target {
+            transition: opacity 1s ease, filter 1s ease;
+        }
+
+        /* Jumpscare Overlay */
+        #jumpscare-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .demon-face {
+            width: 80vmin;
+            height: 80vmin;
+            fill: #8a0000;
+            filter: drop-shadow(0 0 30px red);
+            animation: scream 0.2s infinite linear;
+        }
+
+        .fire-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, #500000 0%, transparent 80%);
+            animation: burn 0.5s infinite alternate;
+            z-index: -1;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes scream {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+
+            25% {
+                transform: scale(1.05) translate(-2px, 2px);
+            }
+
+            50% {
+                transform: scale(1.02) translate(2px, -2px);
+            }
+
+            75% {
+                transform: scale(1.08) translate(-2px, -2px);
+            }
+
+            100% {
+                transform: scale(1) translate(0, 0);
+            }
+        }
+
+        @keyframes burn {
+            0% {
+                opacity: 0.6;
+                height: 90%;
+            }
+
+            100% {
+                opacity: 1;
+                height: 100%;
+            }
+        }
+
+        #game-over-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: #cc0000;
+            z-index: 101;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Nosifer', cursive;
+        }
+
+        .shake-input {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+            border-color: red !important;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="flex flex-col h-screen">
+
+    <!-- JUMPSCARE CONTAINER -->
+    <div id="jumpscare-overlay">
+        <div class="fire-bg"></div>
+        <svg class="demon-face" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M463.5 60.5c-4.1-9.3-13.4-15.5-23.6-15.5H346.9c-10.4 0-20.3 4-28.1 11.2-14.4 13.4-33.6 21.8-54.8 21.8s-40.4-8.4-54.8-21.8c-7.8-7.2-17.7-11.2-28.1-11.2H72.1c-10.2 0-19.5 6.2-23.6 15.5-13.6 30.9-18.7 68.1-14.9 107.6 11.8 122.1 113.6 219.6 238.4 219.6s226.6-97.5 238.4-219.6c3.8-39.5-1.3-76.7-14.9-107.6zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80zm0-256c22.1 0 40 17.9 40 40s-17.9 40-40 40-40-17.9-40-40 17.9-40 40-40z"
+                class="fill-current" />
+            <circle cx="176" cy="256" r="16" fill="#ff0000" filter="drop-shadow(0 0 5px red)" />
+            <circle cx="336" cy="256" r="16" fill="#ff0000" filter="drop-shadow(0 0 5px red)" />
+            <path d="M256 112l18.8 58.2H336l-49.4 35.9 18.8 58.2L256 228.4l-49.4 35.9 18.8-58.2L176 170.2h61.2L256 112z"
+                fill="#ff0000" opacity="0.6" />
+        </svg>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div id="game-over-screen">
+        <h1 class="text-6xl text-center mb-8 animate-pulse">YOU ARE CONSUMED</h1>
+        <button onclick="location.reload()"
+            class="border border-red-600 px-8 py-3 font-mono hover:bg-red-900 hover:text-white transition-colors uppercase tracking-widest text-sm">
+            Try Again
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full p-4 md:p-8" id="main-terminal">
+
+        <!-- SIDEBAR -->
+        <aside class="w-64 flex-shrink-0 hidden md:flex flex-col gap-6 fade-target border-r border-dim pr-6 mr-6">
+            <div class="text-center pb-6 border-b border-dim">
+                <div
+                    class="w-16 h-16 mx-auto bg-neutral-900 border border-dim rounded-full flex items-center justify-center mb-3">
+                    <span class="text-3xl font-bold text-accent">IX</span>
+                </div>
+                <h2 class="text-sm tracking-widest uppercase text-neutral-500">Ninth Circle</h2>
+                <div class="text-[10px] text-accent mt-1 animate-pulse">● SECURE CONNECTION</div>
+            </div>
+
+            <nav class="flex flex-col gap-2 text-sm">
+                <a href="#"
+                    class="p-2 hover:bg-neutral-900 border-l-2 border-transparent hover:border-red-600 transition-all text-neutral-400 hover:text-white">Dashboard</a>
+                <a href="#" class="p-2 bg-neutral-900 border-l-2 border-red-600 text-white font-bold">Investigation:
+                    Britto</a>
+                <a href="#"
+                    class="p-2 hover:bg-neutral-900 border-l-2 border-transparent hover:border-red-600 transition-all text-neutral-400 hover:text-white">Member
+                    Directory</a>
+                <a href="#"
+                    class="p-2 hover:bg-neutral-900 border-l-2 border-transparent hover:border-red-600 transition-all text-neutral-400 hover:text-white">Ritual
+                    Sites</a>
+            </nav>
+
+            <div class="mt-auto border-t border-dim pt-4">
+                <p class="text-[10px] text-neutral-600 uppercase mb-2">System Log</p>
+                <div class="font-mono text-[10px] text-neutral-500 space-y-1">
+                    <p>> [14:02] User login detected</p>
+                    <p>> [14:03] Encryption active</p>
+                    <p class="text-red-900">> [14:05] Unauthorized access...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN FEED -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden">
+
+            <!-- HEADER -->
+            <header class="fade-target mb-8 flex justify-between items-end border-b border-dim pb-4">
+                <div>
+                    <h3 class="text-xs text-accent tracking-[0.3em] uppercase mb-1">Target File</h3>
+                    <h1 class="text-3xl md:text-4xl text-white uppercase">Britto_Incident_Report</h1>
+                </div>
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs text-neutral-500">CLEARANCE LEVEL: <span class="text-white">IX-HIGH</span></p>
+                    <p class="text-xs text-neutral-500">DATE: <span id="current-date"></span></p>
+                </div>
+            </header>
+
+            <!-- SCROLLABLE CONTENT -->
+            <div class="flex-1 overflow-y-auto pr-2 fade-target">
+
+                <!-- SUSPECT GRID -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+
+                    <!-- Card 1 -->
+                    <div class="border-tech bg-[#0a0a0a] p-5 flex gap-4 group cursor-pointer">
+                        <div
+                            class="w-20 h-20 bg-neutral-900 border border-dim flex items-center justify-center shrink-0">
+                            <i data-lucide="user" class="text-neutral-600 w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-lg font-bold group-hover:text-accent transition-colors">The Professor
+                                </h4>
+                                <span
+                                    class="text-[10px] bg-neutral-900 px-2 py-1 text-neutral-400 border border-dim">MAGUS</span>
+                            </div>
+                            <p class="text-xs text-neutral-500 mt-1 mb-3">History Department Chair. Suspected leader of
+                                the inner circle.</p>
+                            <p class="text-[10px] text-red-800 font-bold uppercase">> Access Denied</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="border-tech bg-[#0a0a0a] p-5 flex gap-4 group cursor-pointer">
+                        <div
+                            class="w-20 h-20 bg-neutral-900 border border-dim flex items-center justify-center shrink-0">
+                            <span class="text-2xl text-neutral-700 font-bold">?</span>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-lg font-bold group-hover:text-accent transition-colors">Shadow_9</h4>
+                                <span
+                                    class="text-[10px] bg-red-900/20 px-2 py-1 text-red-500 border border-red-900/30">ENFORCER</span>
+                            </div>
+                            <p class="text-xs text-neutral-500 mt-1 mb-3">Unidentified assailant. CCTV capture from
+                                Library basement.</p>
+                            <p class="text-[10px] text-accent font-bold uppercase">> View Evidence</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- LORE TEXT -->
+                <div class="border-tech bg-[#0a0a0a] p-6 mb-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-accent"></div>
+                    <h4 class="text-sm text-neutral-400 uppercase mb-4 tracking-wider">Incident Summary</h4>
+                    <p class="text-sm text-neutral-300 leading-relaxed max-w-2xl">
+                        Subject "Britto" discovered the ritual site beneath the Clock Tower. Intelligence suggests he
+                        recovered the
+                        <span class="text-white border-b border-dashed border-neutral-600">Cipher Key</span> before
+                        containment teams arrived.
+                        <br><br>
+                        Current status of the Key is unknown. If the Cipher is entered into this terminal, the location
+                        of the Inner Sanctum will be revealed.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- INPUT AREA (Sticky Footer) -->
+            <div class="mt-auto pt-6 border-t border-dim bg-dark z-20">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-xs text-accent uppercase tracking-widest">Decryption Protocol</label>
+                    <span id="attempt-warning" class="text-xs text-red-600 font-bold h-4"></span>
+                </div>
+
+                <div class="relative group" id="input-container">
+                    <div class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none">
+                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                    </div>
+                    <input type="text" id="final-cipher"
+                        class="w-full bg-[#0a0a0a] border border-dim py-4 pl-12 pr-4 text-lg text-white font-mono placeholder-neutral-700 transition-all"
+                        placeholder="ENTER CIPHER KEY..." autocomplete="off">
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2">
+                        <span class="flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                        </span>
+                    </div>
+                </div>
+                <p class="text-[10px] text-neutral-600 mt-2 text-center">Unauthorized attempts will result in immediate
+                    termination.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Date Setup
+        const now = new Date();
+        document.getElementById('current-date').innerText = now.toISOString().split('T')[0];
+
+        // --- GAME LOGIC ---
+        let attempts = 0;
+        const maxAttempts = 5;
+
+        const fadeTargets = document.querySelectorAll('.fade-target');
+        const inputField = document.getElementById('final-cipher');
+        const inputContainer = document.getElementById('input-container'); // Corrected target for shake
+        const warningText = document.getElementById('attempt-warning');
+        const jumpscareOverlay = document.getElementById('jumpscare-overlay');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const mainTerminal = document.getElementById('main-terminal');
+
+        function handleIncorrectAttempt() {
+            attempts++;
+
+            // Shake Effect
+            inputField.classList.add('shake-input');
+            setTimeout(() => inputField.classList.remove('shake-input'), 500);
+
+            // Progressive Fading
+            const opacityLevel = 1 - (attempts * 0.2);
+
+            fadeTargets.forEach(el => {
+                el.style.opacity = opacityLevel;
+                // Add blur to simulate cognitive failure
+                el.style.filter = `blur(${attempts * 0.5}px)`;
+            });
+
+            // Warnings
+            if (attempts === 1) warningText.innerText = "[!] HASH MISMATCH. 4 TRIES LEFT.";
+            if (attempts === 2) warningText.innerText = "[!] TRACE DETECTED. SECTOR LOCKED.";
+            if (attempts === 3) warningText.innerText = "[!!] CRITICAL FAILURE IMMINENT.";
+            if (attempts === 4) warningText.innerText = "THEY ARE HERE. RUN.";
+
+            if (attempts >= maxAttempts) {
+                triggerJumpscare();
+            }
+        }
+
+        function triggerJumpscare() {
+            mainTerminal.style.display = 'none';
+            jumpscareOverlay.style.display = 'flex';
+            document.body.style.backgroundColor = '#000';
+
+            setTimeout(() => {
+                jumpscareOverlay.style.display = 'none';
+                gameOverScreen.style.display = 'flex';
+            }, 3000);
+        }
+
+        inputField.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const val = this.value.toUpperCase().trim();
+                const validAnswers = ["HELLFIRE", "DANTE", "VERGIL", "BRITTO", "LIBRARY"];
+
+                if (validAnswers.includes(val)) {
+                    alert("ACCESS GRANTED. DECRYPTING...");
+                    // Logic for success page
+                } else {
+                    this.value = "";
+                    handleIncorrectAttempt();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

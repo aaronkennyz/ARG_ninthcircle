@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WHO KILLED BRITTO?</title>
+    <link rel="icon" type="image/x-icon" href="./banana.png">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -484,8 +485,9 @@
 
                 // Optional: Redirect after success
                 setTimeout(() => {
-                    window.location.href = "land2.html";
-                    alert("The Circle opens. (Link your next page in the JS)");
+                    //window.location.href = "land2.html";
+                    window.open('land2.html')
+                    //alert("The Circle opens.");
                 }, 1500);
 
             } else if (val === "BRITTO") {
