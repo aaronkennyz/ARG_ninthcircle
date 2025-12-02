@@ -1,0 +1,130 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Student Registration Form</h2>
+    <form method="get" action="action.php">
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>
+                    <input type="text" name="name" placeholder="Enter your name" required />
+                    <input type="email" name="email" placeholder="example@email.com" required />
+                </td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="password" required /></td>
+            </tr>
+            <tr>
+
+                <td>Date of Birth:</td>
+                <td><input type="date" name="dob" required /></td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>
+                    <input type="radio" name="gender" value="male" /> Male
+                    <input type="radio" name="gender" value="female" /> Female
+                </td>
+            </tr>
+            <tr>
+                <td>Branch:</td>
+                <td>
+                    <select name="branch">
+                        <option>CSE</option>
+                        <option>ECE</option>
+                        <option>ISE</option>
+                        <option>AIML</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Hobbies:</td>
+                <td>
+                    <input type="checkbox" name="hobby" value="reading" /> Reading
+                    <input type="checkbox" name="hobby" value="sports" /> Sports
+                    <input type="checkbox" name="hobby" value="music" /> Music
+                </td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+
+                <td>
+                    <textarea name="address" rows="3" placeholder="Enter your address"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <input type="submit" value="Register" />
+                    <input type="reset" value="Reset" />
+                    <button type="submit" onclick="doSomething()"></button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <script>
+
+        function doSomething() {
+            // Get form values
+            let name = document.querySelector('input[name="name"]').value.trim();
+            let email = document.querySelector('input[name="email"]').value.trim();
+            let password = document.querySelector('input[name="password"]').value;
+            let dob = document.querySelector('input[name="dob"]').value;
+
+            let gender = document.querySelector('input[name="gender"]:checked');
+            let hobbies = document.querySelectorAll('input[name="hobby"]:checked');
+
+            // Basic validation
+            if (name === "") {
+                alert("Please enter your name");
+                return false;
+            }
+
+            if (email === "") {
+                alert("Please enter your email");
+                return false;
+            }
+
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters");
+                return false;
+            }
+
+            if (!gender) {
+                alert("Please select your gender");
+                return false;
+            }
+
+            if (hobbies.length === 0) {
+                alert("Please select at least one hobby");
+                return false;
+            }
+
+            if (dob === "") {
+                alert("Please select your Date of Birth");
+                return false;
+            }
+
+            // If everything is valid
+            alert("✅ Form submitted successfully!");
+            return true;
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>
